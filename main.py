@@ -30,7 +30,6 @@ class HuggingChat:
         return json.loads(resp)["conversationId"]
 
     def ask(self,prompt):
-        print(self._BASE+self._ID)
         self.json["inputs"]=prompt
         return self._session.post(self._BASE+self._ID,json=self.json).text
 
