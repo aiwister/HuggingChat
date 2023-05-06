@@ -6,6 +6,13 @@ class HuggingChat:
 
     def __init__(self):
         self._BASE: str = "https://huggingface.co/chat/conversation/"
+        self._SETTINGS_URL: str = "https://huggingface.co/chat/settings/"
+        self.settings_data = {
+            "shareConversationsWithModelAuthors": False,
+            "ethicsModalAcceptedAt": "",
+            "ethicsModalAccepted": True,
+            "activeModel": "OpenAssistant/oasst-sft-6-llama-30b-xor"
+        }
         self.get_id_json = {"model": "OpenAssistant/oasst-sft-6-llama-30b-xor"}
         self.json = {
             "inputs": "hello",
@@ -27,7 +34,12 @@ class HuggingChat:
             }
         }
         self._session = requests.Session()
+        self._settings()
         self._ID: str = self._get_id()
+
+    def _settings(self):
+        return self._session.post(self._SETTINGS_URL,
+                                  data=self.settings_data).content
 
     def _get_id(self):
         resp = self._session.post(self._BASE, json=self.get_id_json).content
